@@ -13,7 +13,7 @@ public class ConstantInterpretation extends Interpretation {
         this.constant = constant;
     }
 
-    public Object getConstant() {
+    public UniverseObject getConstant() {
         return constant;
     }
 }
