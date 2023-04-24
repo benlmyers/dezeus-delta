@@ -1,7 +1,5 @@
 package com.dezeus.delta.core.model;
 
-import java.util.Set;
-
 import com.dezeus.delta.core.Universe;
 import com.dezeus.delta.core.symbol.Symbol;
 

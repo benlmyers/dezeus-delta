@@ -1,12 +1,8 @@
 package com.dezeus.delta.core.model;
 
+import com.dezeus.delta.core.Relation;
 import com.dezeus.delta.core.Universe;
-import com.dezeus.delta.core.UniverseObject;
 import com.dezeus.delta.core.symbol.Symbol;
-
-interface Relation {
-    boolean apply(UniverseObject... parameters);
-}
 
 public class RelationInterpretation extends Interpretation {
 

@@ -1,12 +1,9 @@
 package com.dezeus.delta.core.model;
 
-import com.dezeus.delta.core.Universe;
-import com.dezeus.delta.core.UniverseObject;
-import com.dezeus.delta.core.symbol.Symbol;
+import com.dezeus.delta.core.Function;
 
-interface Function {
-    UniverseObject apply(UniverseObject... parameters);
-}
+import com.dezeus.delta.core.Universe;
+import com.dezeus.delta.core.symbol.Symbol;
 
 public class FunctionInterpretation extends Interpretation {
 

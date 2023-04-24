@@ -9,14 +9,14 @@ import com.dezeus.delta.core.model.RelationInterpretation;
 public class Model {
 
     private Language language;
-    private Set<?> universe;
+    private Universe universe;
     private Set<FunctionInterpretation> functionInterpretations;
     private Set<RelationInterpretation> relationInterpretations;
     private Set<ConstantInterpretation> constantInterpretations;
 
     public Model(
             Language language,
-            Set<?> universe,
+            Universe universe,
             Set<FunctionInterpretation> functionInterpretations,
             Set<RelationInterpretation> relationInterpretations,
             Set<ConstantInterpretation> constantInterpretations) {
@@ -31,7 +31,7 @@ public class Model {
         return language;
     }
 
-    public Set<?> getUniverse() {
+    public Universe getUniverse() {
         return universe;
     }
 
