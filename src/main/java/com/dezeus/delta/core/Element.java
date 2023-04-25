@@ -1,11 +1,11 @@
 package com.dezeus.delta.core;
 
-public class UniverseObject {
+public class Element {
 
     private Object obj;
     private Universe universe;
 
-    public UniverseObject(Object obj) {
+    public Element(Object obj) {
         this.obj = obj;
     }
 

@@ -4,25 +4,25 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Universe implements Collection<UniverseObject> {
+public class Universe implements Collection<Element> {
 
-    private Set<UniverseObject> objects;
+    private Set<Element> objects;
 
-    public Universe(Set<UniverseObject> objects) {
+    public Universe(Set<Element> objects) {
         this.objects = objects;
     }
 
-    public Set<UniverseObject> getObjects() {
+    public Set<Element> getObjects() {
         return objects;
     }
 
     @Override
-    public boolean add(UniverseObject e) {
+    public boolean add(Element e) {
         return objects.add(e);
     }
 
     @Override
-    public boolean addAll(Collection<? extends UniverseObject> c) {
+    public boolean addAll(Collection<? extends Element> c) {
         return objects.addAll(c);
     }
 
@@ -47,7 +47,7 @@ public class Universe implements Collection<UniverseObject> {
     }
 
     @Override
-    public Iterator<UniverseObject> iterator() {
+    public Iterator<Element> iterator() {
         return objects.iterator();
     }
 
