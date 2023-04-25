@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dezeus.delta.exception.InvalidSymbolException;
+import com.dezeus.delta.exception.InvalidTermException;
 
 public class Expression {
 
@@ -32,6 +33,48 @@ public class Expression {
         } catch (InvalidSymbolException e) {
             return new Expression();
         }
+    }
+
+    public boolean isTerm() {
+        return isConstant() || isVariable() || isFunction();
+    }
+
+    public boolean isAtomic() {
+        return isConstant() || isVariable();
+    }
+
+    public boolean isConstant() {
+        return getSymbols().size() == 1 && getSymbols().get(0).getType() == Symbol.Type.CONSTANT;
+    }
+
+    public boolean isVariable() {
+        return getSymbols().size() == 1 && getSymbols().get(0).getType() == Symbol.Type.VARIABLE;
+    }
+
+    public boolean isFunction() {
+        if (getSymbols().size() < 3) {
+            return false;
+        }
+        if (getSymbols().get(0).getType() != Symbol.Type.FUNCTION) {
+            return false;
+        }
+        if (getSymbols().get(1) != new Symbol("(", Symbol.Type.GROUPING)) {
+            return false;
+        }
+        if (getSymbols().get(getSymbols().size() - 1) != new Symbol(")", Symbol.Type.GROUPING)) {
+            return false;
+        }
+        int startIndex = 2;
+        for (int i = startIndex; i < getSymbols().size() - 1; i++) {
+            Expression sub = subExpression(startIndex, i);
+            try {
+                new Term(sub);
+            } catch (InvalidTermException ex) {
+                if (i == getSymbols().size() - 1)
+                    return false;
+            }
+        }
+        return true;
     }
 
     public List<Symbol> getSymbols() {
