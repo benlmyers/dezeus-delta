@@ -1,10 +1,13 @@
 package com.dezeus.delta.core.symbol;
 
-public abstract class Symbol {
+public class Symbol {
+
+    public static final Symbol OPEN_PAREN = new Symbol("(");
+    public static final Symbol CLOSE_PAREN = new Symbol(")");
 
     private String literal;
 
-    protected Symbol(String literal) {
+    public Symbol(String literal) {
         this.literal = literal;
     }
 
