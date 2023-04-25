@@ -27,7 +27,7 @@ public class Symbol {
         return s.getLiteral().equals(getLiteral()) && s.getType() == getType();
     }
 
-    enum Type {
+    public enum Type {
         CONSTANT,
         FUNCTION,
         RELATION,

@@ -3,8 +3,6 @@ package com.dezeus.delta.lang;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
-
 import com.dezeus.delta.exception.InvalidSymbolException;
 
 public class Expression {
