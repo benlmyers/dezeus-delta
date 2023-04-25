@@ -1,4 +1,4 @@
-package com.dezeus.delta.core;
+package com.dezeus.delta.core.model;
 
 import java.util.Collection;
 import java.util.Iterator;

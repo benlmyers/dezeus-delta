@@ -1,6 +1,6 @@
 package com.dezeus.delta.core.element;
 
-import com.dezeus.delta.core.Universe;
+import com.dezeus.delta.core.model.Universe;
 
 public class Element {
 

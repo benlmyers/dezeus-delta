@@ -1,11 +1,9 @@
-package com.dezeus.delta.core;
+package com.dezeus.delta.core.model;
 
 import java.util.Set;
 
-import com.dezeus.delta.core.model.ConstantInterpretation;
-import com.dezeus.delta.core.model.FunctionInterpretation;
-import com.dezeus.delta.core.model.RelationInterpretation;
 import com.dezeus.delta.core.symbol.FunctionSymbol;
+import com.dezeus.delta.core.symbol.Language;
 import com.dezeus.delta.core.symbol.Symbol;
 
 public class Model {
@@ -49,8 +47,12 @@ public class Model {
         return constantInterpretations;
     }
 
+    public int cardinality() {
+        return universe.size();
+    }
+
     public FunctionInterpretation getFunctionInterpretation(FunctionSymbol symbol) throws NoInterpretationException {
-        for (FunctionInterpretation interpretation : functionInterpretations) {
+        for (FunctionInterpretation interpretation : getFunctionInterpretations()) {
             if (interpretation.getSymbol().equals(symbol)) {
                 return interpretation;
             }
@@ -59,7 +61,7 @@ public class Model {
     }
 
     public RelationInterpretation getRelationInterpretation(Symbol symbol) throws NoInterpretationException {
-        for (RelationInterpretation interpretation : relationInterpretations) {
+        for (RelationInterpretation interpretation : getRelationInterpretations()) {
             if (interpretation.getSymbol().equals(symbol)) {
                 return interpretation;
             }
@@ -68,7 +70,7 @@ public class Model {
     }
 
     public ConstantInterpretation getConstantInterpretation(Symbol symbol) throws NoInterpretationException {
-        for (ConstantInterpretation interpretation : constantInterpretations) {
+        for (ConstantInterpretation interpretation : getConstantInterpretations()) {
             if (interpretation.getSymbol().equals(symbol)) {
                 return interpretation;
             }

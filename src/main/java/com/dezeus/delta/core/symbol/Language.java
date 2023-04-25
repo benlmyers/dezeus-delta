@@ -1,13 +1,8 @@
-package com.dezeus.delta.core;
+package com.dezeus.delta.core.symbol;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.dezeus.delta.core.symbol.ConstantSymbol;
-import com.dezeus.delta.core.symbol.FunctionSymbol;
-import com.dezeus.delta.core.symbol.RelationSymbol;
-import com.dezeus.delta.core.symbol.Symbol;
 
 /**
  * Represents a formal language consisting of function symbols, relation

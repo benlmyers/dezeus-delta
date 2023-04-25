@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.dezeus.delta.core.Model;
-import com.dezeus.delta.core.Model.NoInterpretationException;
 import com.dezeus.delta.core.element.Element;
 import com.dezeus.delta.core.element.ElementwiseOperation;
 import com.dezeus.delta.core.element.ElementwiseRelation;
+import com.dezeus.delta.core.model.Model.NoInterpretationException;
 import com.dezeus.delta.core.symbol.ConstantSymbol;
 import com.dezeus.delta.core.symbol.FunctionSymbol;
 import com.dezeus.delta.core.symbol.RelationSymbol;
@@ -86,22 +85,22 @@ public class Embedding {
     private Model codomain;
     private ElementwiseOperation function;
 
-    public Embedding(Model domain, Model codomain, ElementwiseOperation function) throws InvalidEmbeddingException {
+    public Embedding(Model domain, Model codomain, ElementwiseOperation function) throws InvalidException {
         this.domain = domain;
         this.codomain = codomain;
         this.function = function;
         try {
             if (!preservesConstantInterpretation(domain, codomain, function)) {
-                throw new InvalidEmbeddingException("Constant interpretation is not preserved");
+                throw new InvalidException("Constant interpretation is not preserved");
             }
             if (!preservesRelationInterpretation(domain, codomain, function)) {
-                throw new InvalidEmbeddingException("Relation interpretation is not preserved");
+                throw new InvalidException("Relation interpretation is not preserved");
             }
             if (!preservesFunctionInterpretation(domain, codomain, function)) {
-                throw new InvalidEmbeddingException("Function interpretation is not preserved");
+                throw new InvalidException("Function interpretation is not preserved");
             }
         } catch (NoInterpretationException e) {
-            throw new InvalidEmbeddingException("No interpretation found");
+            throw new InvalidException("No interpretation found");
         }
     }
 
@@ -117,8 +116,8 @@ public class Embedding {
         return function;
     }
 
-    public class InvalidEmbeddingException extends Exception {
-        public InvalidEmbeddingException(String reason) {
+    public class InvalidException extends Exception {
+        public InvalidException(String reason) {
             super("This embedding is invalid. (" + reason + ")");
         }
     }
