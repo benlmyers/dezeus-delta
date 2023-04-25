@@ -18,6 +18,15 @@ public class Symbol {
         return type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Symbol)) {
+            return false;
+        }
+        Symbol s = (Symbol) o;
+        return s.getLiteral().equals(getLiteral()) && s.getType() == getType();
+    }
+
     enum Type {
         CONSTANT,
         FUNCTION,
