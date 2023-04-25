@@ -4,80 +4,82 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.dezeus.delta.core.element.Element;
+
 public class Universe implements Collection<Element> {
 
-    private Set<Element> objects;
+    private Set<Element> elements;
 
     public Universe(Set<Element> objects) {
-        this.objects = objects;
+        this.elements = objects;
     }
 
-    public Set<Element> getObjects() {
-        return objects;
+    public Set<Element> getElements() {
+        return elements;
     }
 
     @Override
     public boolean add(Element e) {
-        return objects.add(e);
+        return elements.add(e);
     }
 
     @Override
     public boolean addAll(Collection<? extends Element> c) {
-        return objects.addAll(c);
+        return elements.addAll(c);
     }
 
     @Override
     public void clear() {
-        objects.clear();
+        elements.clear();
     }
 
     @Override
     public boolean contains(Object o) {
-        return objects.contains(o);
+        return elements.contains(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return objects.containsAll(c);
+        return elements.containsAll(c);
     }
 
     @Override
     public boolean isEmpty() {
-        return objects.isEmpty();
+        return elements.isEmpty();
     }
 
     @Override
     public Iterator<Element> iterator() {
-        return objects.iterator();
+        return elements.iterator();
     }
 
     @Override
     public boolean remove(Object o) {
-        return objects.remove(o);
+        return elements.remove(o);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return objects.removeAll(c);
+        return elements.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return objects.retainAll(c);
+        return elements.retainAll(c);
     }
 
     @Override
     public int size() {
-        return objects.size();
+        return elements.size();
     }
 
     @Override
     public Object[] toArray() {
-        return objects.toArray();
+        return elements.toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return objects.toArray(a);
+        return elements.toArray(a);
     }
 }
