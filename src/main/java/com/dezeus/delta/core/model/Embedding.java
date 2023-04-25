@@ -16,12 +16,6 @@ import com.dezeus.delta.util.ListUtil;
 
 public class Embedding {
 
-    private static boolean isEmbedding(Model m, Model n, ElementwiseOperation h) throws NoInterpretationException {
-        return preservesConstantInterpretation(m, n, h)
-                && preservesRelationInterpretation(m, n, h)
-                && preservesFunctionInterpretation(m, n, h);
-    }
-
     private static boolean preservesConstantInterpretation(Model m, Model n, ElementwiseOperation h)
             throws NoInterpretationException {
         Set<ConstantSymbol> constants = m.getLanguage().getConstantSymbols();
@@ -92,12 +86,23 @@ public class Embedding {
     private Model codomain;
     private ElementwiseOperation function;
 
-    public Embedding(Model domain, Model codomain, ElementwiseOperation function) {
+    public Embedding(Model domain, Model codomain, ElementwiseOperation function) throws InvalidEmbeddingException {
         this.domain = domain;
         this.codomain = codomain;
         this.function = function;
-
-        //
+        try {
+            if (!preservesConstantInterpretation(domain, codomain, function)) {
+                throw new InvalidEmbeddingException("Constant interpretation is not preserved");
+            }
+            if (!preservesRelationInterpretation(domain, codomain, function)) {
+                throw new InvalidEmbeddingException("Relation interpretation is not preserved");
+            }
+            if (!preservesFunctionInterpretation(domain, codomain, function)) {
+                throw new InvalidEmbeddingException("Function interpretation is not preserved");
+            }
+        } catch (NoInterpretationException e) {
+            throw new InvalidEmbeddingException("No interpretation found");
+        }
     }
 
     public Model getDomain() {
@@ -113,8 +118,8 @@ public class Embedding {
     }
 
     public class InvalidEmbeddingException extends Exception {
-        public InvalidEmbeddingException(String message) {
-            super("message");
+        public InvalidEmbeddingException(String reason) {
+            super("This embedding is invalid. (" + reason + ")");
         }
     }
 }
