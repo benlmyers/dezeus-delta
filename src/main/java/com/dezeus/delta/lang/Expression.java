@@ -1,38 +1,31 @@
 package com.dezeus.delta.lang;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import com.dezeus.delta.exception.InvalidSymbolException;
-import com.dezeus.delta.exception.InvalidTermException;
+import com.dezeus.delta.exception.InvalidExpressionException;
 
 public class Expression {
 
     private Language language;
-    private List<Symbol> s = new ArrayList<>();
+    private List<Symbol> s;
 
-    public Expression(Language language, List<Symbol> s) throws InvalidSymbolException {
+    public Expression(Language language, List<Symbol> s) throws InvalidExpressionException {
         this.language = language;
         this.s = s;
         for (Symbol _s : s) {
-            if (!language.getSymbols().contains(_s)) {
-                throw new InvalidSymbolException(_s);
+            if (!language.getAllSymbols().contains(_s) && _s.getType() != Symbol.Type.VARIABLE) {
+                throw new InvalidExpressionException("Invalid symbol \"" + _s.getLiteral() + "\"");
             }
         }
     }
 
-    public Expression(Symbol... s) {
-        for (Symbol symbol : s) {
-            this.s.add(symbol);
-        }
+    public Expression(Language language, Symbol... s) throws InvalidExpressionException {
+        this(language, Arrays.asList(s));
     }
 
-    public Expression subExpression(int start, int end) {
-        try {
-            return new Expression(language, s.subList(start, end));
-        } catch (InvalidSymbolException e) {
-            return new Expression();
-        }
+    public Expression subExpression(int start, int end) throws InvalidExpressionException {
+        return new Expression(language, s.subList(start, end));
     }
 
     public boolean isTerm() {
@@ -58,22 +51,7 @@ public class Expression {
         if (getSymbols().get(0).getType() != Symbol.Type.FUNCTION) {
             return false;
         }
-        if (getSymbols().get(1) != new Symbol("(", Symbol.Type.GROUPING)) {
-            return false;
-        }
-        if (getSymbols().get(getSymbols().size() - 1) != new Symbol(")", Symbol.Type.GROUPING)) {
-            return false;
-        }
-        int startIndex = 2;
-        for (int i = startIndex; i < getSymbols().size() - 1; i++) {
-            Expression sub = subExpression(startIndex, i);
-            try {
-                new Term(sub);
-            } catch (InvalidTermException ex) {
-                if (i == getSymbols().size() - 1)
-                    return false;
-            }
-        }
+        // TODO: Implement
         return true;
     }
 

@@ -2,44 +2,51 @@ package com.dezeus.delta.lang;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
+
+import com.dezeus.delta.exception.InvalidSymbolException;
 
 public class Vocabulary {
 
-    private Set<Symbol> relationSymbols = new HashSet<>();
-    private Set<Symbol> functionSymbols = new HashSet<>();
-    private Set<Symbol> constantSymbols = new HashSet<>();
+    private Set<Vocabulary> dependencies;
+    private Set<Symbol> symbols;
+    private Function<Symbol, Integer> arityMap;
 
     public Vocabulary() {
+        this(new HashSet<>());
     }
 
-    public Vocabulary(Set<Symbol> relationSymbols, Set<Symbol> functionSymbols, Set<Symbol> constantSymbols) {
-        this.relationSymbols = relationSymbols;
-        this.functionSymbols = functionSymbols;
-        this.constantSymbols = constantSymbols;
+    public Vocabulary(Set<Symbol> symbols) {
+        this(symbols, new HashSet<>());
     }
 
-    public void add(Vocabulary v) {
-        relationSymbols.addAll(v.getRelationSymbols());
-        functionSymbols.addAll(v.getFunctionSymbols());
-        constantSymbols.addAll(v.getConstantSymbols());
+    public Vocabulary(Set<Symbol> symbols, Set<Vocabulary> dependencies) {
+        this.symbols = symbols;
+        this.dependencies = dependencies;
     }
 
-    public Set<Symbol> getAll() {
-        Set<Symbol> symbols = relationSymbols;
-        symbols.addAll(functionSymbols);
-        symbols.addAll(constantSymbols);
-        return symbols;
+    public Set<Symbol> getAllSymbols() {
+        Set<Symbol> allSymbols = new HashSet<>(symbols);
+        for (Vocabulary dependency : dependencies) {
+            allSymbols.addAll(dependency.getAllSymbols());
+        }
+        return allSymbols;
     }
 
-    public Set<Symbol> getRelationSymbols() {
-        return relationSymbols;
+    public int getArity(Symbol symbol) throws InvalidSymbolException {
+        if (symbols.contains(symbol)) {
+            return arityMap.apply(symbol);
+        } else {
+            for (Vocabulary dependency : dependencies) {
+                if (dependency.getAllSymbols().contains(symbol)) {
+                    return dependency.getArity(symbol);
+                }
+            }
+            throw new InvalidSymbolException(symbol);
+        }
     }
 
-    public Set<Symbol> getFunctionSymbols() {
-        return functionSymbols;
-    }
-
-    public Set<Symbol> getConstantSymbols() {
-        return constantSymbols;
+    public Set<Vocabulary> getDependencies() {
+        return dependencies;
     }
 }

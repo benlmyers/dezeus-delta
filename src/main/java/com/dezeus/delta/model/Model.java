@@ -2,12 +2,12 @@ package com.dezeus.delta.model;
 
 import com.dezeus.delta.logic.AryFunction;
 import com.dezeus.delta.logic.AryRelation;
-import com.dezeus.delta.set.HybridSet;
+import com.dezeus.delta.set.DezeusSet;
 
 public class Model {
 
-    HybridSet<Object> universe;
-    HybridSet<AryRelation<Object>> relations;
-    HybridSet<AryFunction<Object, Object>> functions;
-    HybridSet<Object> constants;
+    DezeusSet<Object> universe;
+    DezeusSet<AryRelation<Object>> relations;
+    DezeusSet<AryFunction<Object, Object>> functions;
+    DezeusSet<Object> constants;
 }

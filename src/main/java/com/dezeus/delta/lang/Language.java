@@ -3,50 +3,37 @@ package com.dezeus.delta.lang;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.dezeus.delta.logic.FirstOrderLanguage;
-
 public class Language {
 
-    private Set<Vocabulary> dependencies;
     private Vocabulary vocabulary;
-    private Set<Symbol> variables;
+    private Set<Symbol> variableSymbols;
 
-    public Language(Vocabulary vocabulary, Set<Vocabulary> dependencies, Set<Symbol> variables) {
+    public Language(Vocabulary vocabulary, Set<Symbol> variableSymbols) {
         this.vocabulary = vocabulary;
-        this.dependencies = dependencies;
-        this.variables = variables;
+        this.variableSymbols = variableSymbols;
     }
 
-    public Language(Vocabulary vocabulary, Set<Symbol> variables) {
-        this(vocabulary, new HashSet<>(), variables);
+    public Language(Vocabulary vocabulary) {
+        this(vocabulary, new HashSet<>());
     }
 
-    public Set<Symbol> getSymbols() {
-        Set<Symbol> symbols = new HashSet<>();
-        symbols.addAll(FirstOrderLanguage.L0());
-        symbols.addAll(getFullVocabulary().getAll());
-        symbols.addAll(variables);
-        return symbols;
-    }
-
-    public Vocabulary getFullVocabulary() {
-        Vocabulary v = new Vocabulary();
-        v.add(getVocabulary());
-        for (Vocabulary dependency : getDependencies()) {
-            v.add(dependency);
-        }
-        return v;
+    public Language() {
+        this(new Vocabulary());
     }
 
     public Vocabulary getVocabulary() {
         return vocabulary;
     }
 
-    public Set<Vocabulary> getDependencies() {
-        return dependencies;
+    public Set<Symbol> getVariableSymbols() {
+        return variableSymbols;
     }
 
-    public Set<Symbol> getVariables() {
-        return variables;
+    public Set<Symbol> getAllSymbols() {
+        Set<Symbol> result = new HashSet<>();
+        result.addAll(Symbol.ALL_LOGIC());
+        result.addAll(vocabulary.getAllSymbols());
+        result.addAll(variableSymbols);
+        return result;
     }
 }
