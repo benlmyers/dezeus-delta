@@ -1,5 +1,6 @@
 package com.dezeus.delta.lang;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,5 +62,26 @@ public class Expression {
 
     public Language getLanguage() {
         return language;
+    }
+
+    public Expression add(Expression e) throws InvalidExpressionException {
+        List<Symbol> newSymbols = new ArrayList<>();
+        newSymbols.addAll(getSymbols());
+        newSymbols.addAll(e.getSymbols());
+        return new Expression(getLanguage(), newSymbols);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Expression)) {
+            return false;
+        }
+        Expression e = (Expression) o;
+        return getSymbols().equals(e.getSymbols());
+    }
+
+    @Override
+    public int hashCode() {
+        return getSymbols().hashCode();
     }
 }
