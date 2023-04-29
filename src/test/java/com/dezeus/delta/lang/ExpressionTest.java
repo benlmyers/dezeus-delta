@@ -1,26 +1,25 @@
 package com.dezeus.delta.lang;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 import com.dezeus.delta.exception.InvalidExpressionException;
 
 public class ExpressionTest {
 
-    private Language l = new Language();
     private Symbol v1 = new Symbol("v1", Symbol.Type.VARIABLE);
     private Symbol v2 = new Symbol("v2", Symbol.Type.VARIABLE);
     private Symbol a = new Symbol("a", Symbol.Type.CONSTANT);
+    private Symbol b = new Symbol("b", Symbol.Type.CONSTANT);
+    private Language l = new Language();
+    private Language l1 = new Language(new Vocabulary(a, b));
 
     @Test
     public void testExpression() throws InvalidExpressionException {
-        Expression e1 = new Expression(l, v1);
-        Expression e2 = new Expression(l, v2);
-        Expression e3 = new Expression(l, v1, v2);
-        new Expression(l, Symbol.IMPLIES);
-        Expression e5 = e1.add(e2);
-        assertEquals(e3, e5);
+        new Expression(l, v1);
+        new Expression(l, v2);
+        new Expression(l, v1, Symbol.IMPLIES, v2);
+        new Expression(l1, a);
+        new Expression(l1, b);
     }
 
     @Test(expected = InvalidExpressionException.class)
