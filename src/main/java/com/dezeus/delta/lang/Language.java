@@ -31,7 +31,7 @@ public class Language {
 
     public Set<Symbol> getAllSymbols() {
         Set<Symbol> result = new HashSet<>();
-        result.addAll(Symbol.ALL_LOGIC());
+        result.addAll(Symbol.BASE_LOGIC());
         result.addAll(vocabulary.getAllSymbols());
         result.addAll(variableSymbols);
         return result;

@@ -13,7 +13,7 @@ public class Symbol {
     public static final Symbol FOR_ALL = new Symbol("∀");
     public static final Symbol EQUALS = new Symbol("=");
 
-    public static final Set<Symbol> ALL_LOGIC() {
+    public static final Set<Symbol> BASE_LOGIC() {
         Set<Symbol> result = new HashSet<>();
         result.add(LEFT_PAREN);
         result.add(RIGHT_PAREN);

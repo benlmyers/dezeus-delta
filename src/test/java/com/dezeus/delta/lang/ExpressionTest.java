@@ -9,8 +9,8 @@ import com.dezeus.delta.exception.InvalidExpressionException;
 
 public class ExpressionTest {
 
-    private Symbol v1 = new Symbol("v1", Symbol.Type.VARIABLE);
-    private Symbol v2 = new Symbol("v2", Symbol.Type.VARIABLE);
+    private Symbol v1 = new Variable("v1");
+    private Symbol v2 = new Variable("v2");
     private Symbol a = new Symbol("a", Symbol.Type.CONSTANT);
     private Symbol b = new Symbol("b", Symbol.Type.CONSTANT);
     private Symbol c = new Symbol("c", Symbol.Type.CONSTANT);
@@ -100,6 +100,6 @@ public class ExpressionTest {
 
     @Test
     public void testIsEquality() throws InvalidExpressionException {
-
+        // TODO
     }
 }
