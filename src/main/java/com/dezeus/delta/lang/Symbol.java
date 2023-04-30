@@ -72,6 +72,11 @@ public class Symbol {
         return getLiteral().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return getLiteral();
+    }
+
     public enum Type {
         LOGICAL,
         CONSTANT,

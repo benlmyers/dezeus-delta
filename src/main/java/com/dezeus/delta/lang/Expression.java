@@ -25,35 +25,140 @@ public class Expression {
         this(language, Arrays.asList(s));
     }
 
-    public Expression subExpression(int start, int end) throws InvalidExpressionException {
-        return new Expression(language, s.subList(start, end));
+    /**
+     * Gets a sub-expression.
+     * 
+     * @param start The starting symbol index, inclusive
+     * @param end   The ending symbol index, exclusive
+     * @return
+     */
+    public Expression subExpression(int start, int end) {
+        try {
+            return new Expression(language, s.subList(start, end));
+        } catch (InvalidExpressionException e) {
+            // Unreachable; a subexpression is always an expression.
+            return null;
+        }
     }
 
-    public boolean isTerm() {
-        return isConstant() || isVariable() || isFunction();
+    protected boolean isTerm() {
+        return isAtomic() || isFunction();
     }
 
-    public boolean isAtomic() {
+    protected boolean isFormula() {
+        return isPredicate() || isLogicalTransform();
+    }
+
+    protected boolean isAtomic() {
         return isConstant() || isVariable();
     }
 
-    public boolean isConstant() {
+    protected boolean isLogicalTransform() {
+        return isEquality() || isNegation() || isImplication() || isUniversalInstantiation();
+    }
+
+    protected boolean isConstant() {
         return getSymbols().size() == 1 && getSymbols().get(0).getType() == Symbol.Type.CONSTANT;
     }
 
-    public boolean isVariable() {
+    protected boolean isVariable() {
         return getSymbols().size() == 1 && getSymbols().get(0).getType() == Symbol.Type.VARIABLE;
     }
 
-    public boolean isFunction() {
+    protected boolean isEquality() {
+        if (size() < 5) {
+            return false;
+        }
+        if (!isBracketed()) {
+            return false;
+        }
+        if (!getSymbols().contains(Symbol.EQUALS)) {
+            return false;
+        }
+        int splitIndex = getSymbols().indexOf(Symbol.EQUALS);
+        Expression left = subExpression(0, splitIndex);
+        Expression right = subExpression(splitIndex + 1, size() - 1);
+        return left.isFormula() && right.isFormula();
+    }
+
+    protected boolean isNegation() {
+        if (size() < 4) {
+            return false;
+        }
+        if (!isBracketed()) {
+            return false;
+        }
+        if (!getSymbols().contains(Symbol.NOT)) {
+            return false;
+        }
+        Expression sub = subExpression(2, size() - 1);
+        return sub.isFormula();
+    }
+
+    protected boolean isImplication() {
+        if (size() < 5) {
+            return false;
+        }
+        if (!isBracketed()) {
+            return false;
+        }
+        if (!getSymbols().contains(Symbol.EQUALS)) {
+            return false;
+        }
+        int splitIndex = getSymbols().indexOf(Symbol.IMPLIES);
+        Expression left = subExpression(0, splitIndex);
+        Expression right = subExpression(splitIndex + 1, size() - 1);
+        return left.isFormula() && right.isFormula();
+    }
+
+    protected boolean isUniversalInstantiation() {
+        if (size() < 5) {
+            return false;
+        }
+        if (!isBracketed()) {
+            return false;
+        }
+        if (!getSymbols().contains(Symbol.FOR_ALL)) {
+            return false;
+        }
+        Expression var = subExpression(2, 3);
+        if (!var.isVariable()) {
+            return false;
+        }
+        Expression sub = subExpression(3, size() - 1);
+        return sub.isFormula();
+    }
+
+    protected boolean isFunction() {
         if (getSymbols().size() < 3) {
             return false;
         }
         if (getSymbols().get(0).getType() != Symbol.Type.FUNCTION) {
             return false;
         }
-        // TODO: Implement
-        return true;
+        if (getSymbols().get(1) != Symbol.LEFT_PAREN) {
+            return false;
+        }
+        if (getSymbols().get(size() - 1) != Symbol.RIGHT_PAREN) {
+            return false;
+        }
+        return subExpression(1, size() - 1).isListOfTerms();
+    }
+
+    protected boolean isPredicate() {
+        if (getSymbols().size() < 3) {
+            return false;
+        }
+        if (getSymbols().get(0).getType() != Symbol.Type.PREDICATE) {
+            return false;
+        }
+        if (getSymbols().get(1) != Symbol.LEFT_PAREN) {
+            return false;
+        }
+        if (getSymbols().get(size() - 1) != Symbol.RIGHT_PAREN) {
+            return false;
+        }
+        return subExpression(1, size() - 1).isListOfTerms();
     }
 
     public List<Symbol> getSymbols() {
@@ -71,17 +176,54 @@ public class Expression {
         return new Expression(getLanguage(), newSymbols);
     }
 
+    public int size() {
+        return getSymbols().size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Expression)) {
             return false;
         }
         Expression e = (Expression) o;
-        return getSymbols().equals(e.getSymbols());
+        return getSymbols().equals(e.getSymbols()) && getLanguage().equals(e.getLanguage());
     }
 
     @Override
     public int hashCode() {
         return getSymbols().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for (Symbol symbol : getSymbols()) {
+            result += symbol.getLiteral();
+        }
+        return result;
+    }
+
+    private boolean isBracketed() {
+        if (getSymbols().get(0) != Symbol.LEFT_PAREN) {
+            return false;
+        }
+        if (getSymbols().get(size() - 1) != Symbol.RIGHT_PAREN) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isListOfTerms() {
+        int start = 0;
+        for (int i = 0; i < getSymbols().size(); i++) {
+            if (getSymbols().get(i) == Symbol.DELIMITER) {
+                Expression subExpression = subExpression(start, i);
+                if (!subExpression.isTerm()) {
+                    return false;
+                }
+                start = i;
+            }
+        }
+        return true;
     }
 }
