@@ -42,19 +42,15 @@ public class Expression {
     }
 
     protected boolean isTerm() {
-        return isAtomic() || isFunction();
+        return isConstant() || isVariable() || isFunction();
     }
 
     protected boolean isFormula() {
-        return isPredicate() || isLogicalTransform();
-    }
-
-    protected boolean isAtomic() {
-        return isConstant() || isVariable();
+        return isPredicate() || isEquality() || isLogicalTransform();
     }
 
     protected boolean isLogicalTransform() {
-        return isEquality() || isNegation() || isImplication() || isUniversalInstantiation();
+        return isNegation() || isImplication() || isUniversalInstantiation();
     }
 
     protected boolean isConstant() {

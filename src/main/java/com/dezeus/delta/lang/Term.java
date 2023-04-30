@@ -21,7 +21,7 @@ public class Term {
     }
 
     public boolean isAtomic() {
-        return getExpression().isAtomic();
+        return isConstant() || isVariable();
     }
 
     public boolean isConstant() {
@@ -38,6 +38,10 @@ public class Term {
 
     public List<Symbol> getSymbols() {
         return getExpression().getSymbols();
+    }
+
+    public int size() {
+        return getSymbols().size();
     }
 
     public List<Term> getSubTerms() throws InvalidTermException {
