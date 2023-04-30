@@ -72,9 +72,9 @@ public class Expression {
             return false;
         }
         int splitIndex = getSymbols().indexOf(Symbol.EQUALS);
-        Expression left = subExpression(0, splitIndex);
+        Expression left = subExpression(1, splitIndex);
         Expression right = subExpression(splitIndex + 1, size() - 1);
-        return left.isFormula() && right.isFormula();
+        return left.isTerm() && right.isTerm();
     }
 
     protected boolean isNegation() {
@@ -98,7 +98,7 @@ public class Expression {
         if (!isBracketed()) {
             return false;
         }
-        if (!getSymbols().contains(Symbol.EQUALS)) {
+        if (!getSymbols().contains(Symbol.IMPLIES)) {
             return false;
         }
         int splitIndex = getSymbols().indexOf(Symbol.IMPLIES);
@@ -117,8 +117,8 @@ public class Expression {
         if (!getSymbols().contains(Symbol.FOR_ALL)) {
             return false;
         }
-        Expression var = subExpression(2, 3);
-        if (!var.isVariable()) {
+        Expression variable = subExpression(2, 3);
+        if (!variable.isVariable()) {
             return false;
         }
         Expression sub = subExpression(3, size() - 1);
