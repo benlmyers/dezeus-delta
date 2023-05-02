@@ -40,6 +40,7 @@ public class Symbol {
     public Symbol(String literal, Type type, int arity) {
         this.literal = literal;
         this.type = type;
+        this.arity = arity;
     }
 
     public Symbol(String literal, Type type) {

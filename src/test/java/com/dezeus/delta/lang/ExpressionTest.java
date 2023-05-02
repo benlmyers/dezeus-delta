@@ -100,6 +100,32 @@ public class ExpressionTest {
 
     @Test
     public void testIsEquality() throws InvalidExpressionException {
-        // TODO
+        testCreateExpression();
+        assertFalse(e1.isEquality());
+        assertFalse(e2.isEquality());
+        assertFalse(e3.isEquality());
+        assertFalse(e4.isEquality());
+        assertFalse(e5.isEquality());
+        Expression e6 = new Expression(l2, Symbol.LEFT_PAREN, a, Symbol.EQUALS, b, Symbol.RIGHT_PAREN);
+        assertTrue(e6.isEquality());
+        Expression e7 = new Expression(l2, Symbol.LEFT_PAREN, F, Symbol.LEFT_PAREN, a, Symbol.RIGHT_PAREN,
+                Symbol.EQUALS, c, Symbol.RIGHT_PAREN);
+        assertTrue(e7.isEquality());
+    }
+
+    @Test
+    public void testIsNegation() throws InvalidExpressionException {
+        testCreateExpression();
+        assertFalse(e1.isNegation());
+        assertFalse(e2.isNegation());
+        assertFalse(e3.isNegation());
+        assertFalse(e4.isNegation());
+        assertTrue(e5.isNegation());
+        Expression e6 = new Expression(l2, Symbol.LEFT_PAREN, Symbol.NOT, Symbol.LEFT_PAREN, a, Symbol.EQUALS, b,
+                Symbol.RIGHT_PAREN, Symbol.RIGHT_PAREN);
+        assertTrue(e6.isNegation());
+        Expression e7 = new Expression(l2, Symbol.LEFT_PAREN, Symbol.NOT, R, Symbol.LEFT_PAREN, a, Symbol.RIGHT_PAREN,
+                Symbol.RIGHT_PAREN);
+        assertTrue(e7.isNegation());
     }
 }

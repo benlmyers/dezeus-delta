@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dezeus.delta.exception.InvalidFormulaException;
+import com.dezeus.delta.exception.NoScopeException;
+import com.dezeus.delta.exception.NoSubFormulaException;
+
+import javafx.util.Pair;
 
 public class Formula {
 
@@ -97,5 +101,51 @@ public class Formula {
             return result;
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * Gets the scope of a variable within the formula.
+     * The scope is a range of where such a variable occurs.
+     * 
+     * @param v The variable to search a scope for
+     * @return The range, inclusive, of the indexes of symbols upon which the
+     *         variable occurs
+     * @throws NoScopeException when an issue occurs with finding a universal
+     *                          instantiation subformula of the variable, or when a
+     *                          subformula is found but is not a universal
+     *                          instantiation
+     */
+    public Pair<Integer, Integer> getScope(Variable v) throws NoScopeException {
+        int startIndex = getSymbols().indexOf(v);
+        if (startIndex < 1) {
+            throw new NoScopeException(v, this);
+        }
+        try {
+            Formula formula = findSubformula(startIndex - 1);
+            if (!formula.isUniversalInstantiation()) {
+                throw new NoScopeException(v, this);
+            }
+            int endIndex = startIndex + formula.size() - 1;
+            return new Pair<>(startIndex, endIndex);
+        } catch (Exception _0) {
+            throw new NoScopeException(v, this);
+        }
+    }
+
+    private Formula findSubformula(int startingIndex) throws InvalidFormulaException, NoSubFormulaException {
+        int parenCount = 0;
+        for (int i = startingIndex; i < size(); i++) {
+            if (getSymbols().get(i) == Symbol.LEFT_PAREN) {
+                parenCount++;
+            }
+            if (getSymbols().get(i) == Symbol.RIGHT_PAREN) {
+                parenCount--;
+                if (parenCount == 0) {
+                    Expression sub = getExpression().subExpression(startingIndex, i + 1);
+                    return new Formula(sub);
+                }
+            }
+        }
+        throw new NoSubFormulaException(this);
     }
 }
