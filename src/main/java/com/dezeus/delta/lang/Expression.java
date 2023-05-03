@@ -5,12 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.dezeus.delta.exception.InvalidExpressionException;
+import com.dezeus.delta.lang.Symbol.Type;
 
 public class Expression {
 
     private Language language;
     private List<Symbol> s;
 
+    /**
+     * Creates an expression from a list of symbols
+     * 
+     * @param language The language to use. All symbols used in the expression must
+     *                 belong to the language.
+     * @param s        The list of symbols
+     * @throws InvalidExpressionException if the expression contains symbols not
+     *                                    present in the language
+     */
     public Expression(Language language, List<Symbol> s) throws InvalidExpressionException {
         this.language = language;
         this.s = s;
@@ -21,12 +31,21 @@ public class Expression {
         }
     }
 
+    /**
+     * Creates an expression from a list of symbols
+     * 
+     * @param language The language to use. All symbols used in the expression must
+     *                 belong to the language.
+     * @param s        The list of symbols
+     * @throws InvalidExpressionException if the expression contains symbols not
+     *                                    present in the language
+     */
     public Expression(Language language, Symbol... s) throws InvalidExpressionException {
         this(language, Arrays.asList(s));
     }
 
     /**
-     * Gets a sub-expression.
+     * Gets a sub-expression
      * 
      * @param start The starting symbol index, inclusive
      * @param end   The ending symbol index, exclusive
@@ -41,22 +60,48 @@ public class Expression {
         }
     }
 
+    /**
+     * Whether the expression is a term
+     * 
+     * @return true if the expression is a term, false otherwise
+     */
     protected boolean isTerm() {
         return isConstant() || isVariable() || isFunction();
     }
 
+    /**
+     * Whether the expression is a formula
+     * 
+     * @return true if the expression is a formula, false otherwise
+     */
     protected boolean isFormula() {
         return isPredicate() || isEquality() || isLogicalTransform();
     }
 
+    /**
+     * Whether the expression is a logical transform (negation, implication, or
+     * instantiation)
+     * 
+     * @return true if the expression is a logical transform, false otherwise
+     */
     protected boolean isLogicalTransform() {
         return isNegation() || isImplication() || isUniversalInstantiation();
     }
 
+    /**
+     * Whether the expression is a constant
+     * 
+     * @return true if the expression is a constant, false otherwise
+     */
     protected boolean isConstant() {
         return getSymbols().size() == 1 && getSymbols().get(0).getType() == Symbol.Type.CONSTANT;
     }
 
+    /**
+     * Whether the expression is a variable
+     * 
+     * @return true if the expression is a variable, false otherwise
+     */
     protected boolean isVariable() {
         return getSymbols().size() == 1 && getSymbols().get(0).getType() == Symbol.Type.VARIABLE;
     }
@@ -102,27 +147,22 @@ public class Expression {
             return false;
         }
         int splitIndex = getSymbols().indexOf(Symbol.IMPLIES);
-        Expression left = subExpression(0, splitIndex);
+        Expression left = subExpression(1, splitIndex);
         Expression right = subExpression(splitIndex + 1, size() - 1);
         return left.isFormula() && right.isFormula();
     }
 
     protected boolean isUniversalInstantiation() {
-        if (size() < 5) {
+        if (size() < 3) {
             return false;
         }
-        if (!isBracketed()) {
+        if (getSymbols().get(0) != Symbol.FOR_ALL) {
             return false;
         }
-        if (!getSymbols().contains(Symbol.FOR_ALL)) {
+        if (getSymbols().get(1).getType() != Type.VARIABLE) {
             return false;
         }
-        Expression variable = subExpression(2, 3);
-        if (!variable.isVariable()) {
-            return false;
-        }
-        Expression sub = subExpression(3, size() - 1);
-        return sub.isFormula();
+        return subExpression(2, size()).isFormula();
     }
 
     protected boolean isFunction() {

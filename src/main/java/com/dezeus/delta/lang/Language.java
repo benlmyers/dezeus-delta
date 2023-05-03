@@ -3,6 +3,8 @@ package com.dezeus.delta.lang;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.dezeus.delta.exception.NoSymbolException;
+
 public class Language {
 
     private Vocabulary vocabulary;
@@ -35,5 +37,14 @@ public class Language {
         result.addAll(vocabulary.getAllSymbols());
         result.addAll(variableSymbols);
         return result;
+    }
+
+    public Symbol getSymbol(String literal) throws NoSymbolException {
+        for (Symbol s : getAllSymbols()) {
+            if (s.getLiteral().equals(literal)) {
+                return s;
+            }
+        }
+        throw new NoSymbolException(literal);
     }
 }
