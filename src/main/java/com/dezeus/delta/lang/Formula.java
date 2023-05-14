@@ -7,8 +7,6 @@ import com.dezeus.delta.exception.InvalidFormulaException;
 import com.dezeus.delta.exception.NoScopeException;
 import com.dezeus.delta.exception.NoSubFormulaException;
 
-import javafx.util.Pair;
-
 public class Formula {
 
     private Expression e;
@@ -115,7 +113,7 @@ public class Formula {
      *                          subformula is found but is not a universal
      *                          instantiation
      */
-    public Pair<Integer, Integer> getScope(Variable v) throws NoScopeException {
+    public int[] getScope(Variable v) throws NoScopeException {
         int startIndex = getSymbols().indexOf(v);
         if (startIndex < 1) {
             throw new NoScopeException(v, this);
@@ -126,7 +124,8 @@ public class Formula {
                 throw new NoScopeException(v, this);
             }
             int endIndex = startIndex + formula.size() - 1;
-            return new Pair<>(startIndex, endIndex);
+            int[] result = { startIndex, endIndex };
+            return result;
         } catch (Exception _0) {
             throw new NoScopeException(v, this);
         }
