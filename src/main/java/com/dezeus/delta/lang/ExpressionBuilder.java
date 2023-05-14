@@ -19,7 +19,7 @@ public class ExpressionBuilder {
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == ' ')
                 continue;
-            for (int j = i + 1; j < s.length(); j++) {
+            for (int j = i+1; j < s.length(); j++) {
                 if (s.charAt(j) == ' ')
                     continue;
                 String sub = s.substring(i, j);
