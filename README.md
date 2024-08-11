@@ -1,0 +1,1 @@
+This is the start of a formal verification engine written in Java. I moved on to Lean after starting this, but this project is able to decode logical statements into an expression based on text input.
